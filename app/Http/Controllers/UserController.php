@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 use Laravel\Sanctum\PersonalAccessToken;
 
 class UserController extends Controller
@@ -52,36 +55,33 @@ class UserController extends Controller
         ]);
 
         if (Auth::guard('web')->attempt($user)) {
-            $user = User::where('email', $request->email)->first();
-            if ($user && Hash::check($request->password, $user->password)) {
-                $device = $request->userAgent();
-                $token = $user->createToken($device)->plainTextToken;
-                return Response([
-                    "status" => 200,
-                    'token' => $token
-                ]);
-            }
+            $device = $request->userAgent();
+            $token = Auth::user()->createToken($device)->plainTextToken;
+            return response()->json([
+                "user" => Auth::user(),
+                "token" => $token
+            ]);
+        }else{
+                    return response()->json(
+            "Data incorrect",403);
         }
-        return Response([
-            'status' => 400,
-            'message' => 'Your data is incorect'
-        ]);
-    }
-    // public function logout($token = null)
-    // {
 
-    //     $user = Auth::guard('sanctum')->user();
-    //     if (null == $token) {
-    //         $user->currentAccessToken()->delete();
-    //         return;
-    //     }
-    //     $personaleToken = PersonalAccessToken::findToken($token);
-    //     if ($user->id == $personaleToken->tokenable_id && get_class($user) == $personaleToken->tokenable_type) {
-    //         $personaleToken->delete();
-    //         return response()->json([
-    //             'status' => 200,
-    //             'message' => 'logout successful',
-    //         ]);
-    //     }
-    // }
+    }
+    public function logout($token = null)
+    {
+
+        $user = Auth::guard('sanctum')->user();
+        if (null == $token) {
+            $user->currentAccessToken()->delete();
+            return;
+        }
+        $personaleToken = PersonalAccessToken::findToken($token);
+        if ($user->id == $personaleToken->tokenable_id && get_class($user) == $personaleToken->tokenable_type) {
+            $personaleToken->delete();
+            return response()->json([
+                'status' => 200,
+                'message' => 'logout successful',
+            ]);
+        }
+    }
 }
