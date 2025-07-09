@@ -67,21 +67,21 @@ class UserController extends Controller
             'message' => 'Your data is incorect'
         ]);
     }
-    public function logout($token = null)
-    {
+    // public function logout($token = null)
+    // {
 
-        $user = Auth::guard('sanctum')->user();
-        if (null == $token) {
-            $user->currentAccessToken()->delete();
-            return;
-        }
-        $personaleToken = PersonalAccessToken::findToken($token);
-        if ($user->id == $personaleToken->tokenable_id && get_class($user) == $personaleToken->tokenable_type) {
-            $personaleToken->delete();
-            return response()->json([
-                'status' => 200,
-                'message' => 'logout successful',
-            ]);
-        }
-    }
+    //     $user = Auth::guard('sanctum')->user();
+    //     if (null == $token) {
+    //         $user->currentAccessToken()->delete();
+    //         return;
+    //     }
+    //     $personaleToken = PersonalAccessToken::findToken($token);
+    //     if ($user->id == $personaleToken->tokenable_id && get_class($user) == $personaleToken->tokenable_type) {
+    //         $personaleToken->delete();
+    //         return response()->json([
+    //             'status' => 200,
+    //             'message' => 'logout successful',
+    //         ]);
+    //     }
+    // }
 }
