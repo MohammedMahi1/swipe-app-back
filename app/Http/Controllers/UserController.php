@@ -63,7 +63,7 @@ class UserController extends Controller
             ]);
         }else{
                     return response()->json(
-            "Data incorrect",403);
+            "Email or Password is incorrect",403);
         }
 
     }
