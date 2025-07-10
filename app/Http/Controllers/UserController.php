@@ -42,9 +42,9 @@ class UserController extends Controller
             ]);
             $createUser->save();
             return response()->json(['message' => 'User created successfully'], 201);
-        } else {
-            return response()->json(['message' => 'Validation failed'], 422);
-        }
+        } 
+        return response()->json(['message' => 'Validation failed'], 422);
+       
     }
     public function login(Request $request)
     {
