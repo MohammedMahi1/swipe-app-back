@@ -61,11 +61,12 @@ class UserController extends Controller
                 "user" => Auth::user(),
                 "token" => $token
             ]);
-        }else{
-                    return response()->json(
-            "Email or Password is incorrect",403);
+        } else {
+            return response()->json(
+                "Email or Password is incorrect",
+                403
+            );
         }
-
     }
     public function logout($token = null)
     {
